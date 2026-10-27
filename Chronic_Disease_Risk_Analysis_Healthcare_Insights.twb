@@ -1,0 +1,597 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<workbook original-version='18.1' source-build='2026.2.0 (20262.26.0912.1023)' source-platform='win' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <AccessibleZoneTabOrder />
+    <AutoCreateAndUpdateDSDPhoneLayouts />
+    <SetMembershipControl />
+    <SheetIdentifierTracking />
+    <WindowsPersistSimpleIdentifiers />
+  </document-format-change-manifest>
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <datasources>
+    <datasource caption='smart_healthcare_dataset' inline='true' name='federated.smart_healthcare_dataset' version='18.1'>
+      <connection class='federated'>
+        <named-connections>
+          <named-connection caption='smart_healthcare_dataset' name='textscan.smart_healthcare_dataset'>
+            <connection class='textscan' directory='C:/Users/soumadip/Desktop/HEALTH WALA' filename='smart_healthcare_dataset.csv' />
+          </named-connection>
+        </named-connections>
+        <relation connection='textscan.smart_healthcare_dataset' name='smart_healthcare_dataset.csv' table='[smart_healthcare_dataset#csv]' type='table'>
+          <columns character-set='UTF-8' header='yes' locale='en_US' separator=','>
+            <column datatype='integer' name='age' ordinal='0' />
+            <column datatype='string' name='gender' ordinal='1' />
+            <column datatype='real' name='bmi' ordinal='2' />
+            <column datatype='integer' name='exercise_level' ordinal='3' />
+            <column datatype='integer' name='smoking' ordinal='4' />
+            <column datatype='integer' name='alcohol' ordinal='5' />
+            <column datatype='integer' name='blood_pressure' ordinal='6' />
+            <column datatype='integer' name='cholesterol' ordinal='7' />
+            <column datatype='integer' name='glucose' ordinal='8' />
+            <column datatype='integer' name='fatigue' ordinal='9' />
+            <column datatype='integer' name='chest_pain' ordinal='10' />
+            <column datatype='integer' name='dizziness' ordinal='11' />
+            <column datatype='integer' name='heart_disease' ordinal='12' />
+            <column datatype='integer' name='diabetes' ordinal='13' />
+            <column datatype='integer' name='stroke' ordinal='14' />
+            <column datatype='real' name='health_risk_score' ordinal='15' />
+          </columns>
+        </relation>
+      </connection>
+      
+      <!-- Standard Number of Records Measure -->
+      <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' user:auto-column='numrec'>
+        <calculation class='tableau' formula='1' />
+      </column>
+      
+      <!-- Calculated Field 1: Age Group -->
+      <column caption='Age Group' datatype='string' name='[Calculation_AgeGroup]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [age] &lt; 30 THEN &quot;Under 30&quot;&#10;ELSEIF [age] &lt;= 39 THEN &quot;30-39&quot;&#10;ELSEIF [age] &lt;= 49 THEN &quot;40-49&quot;&#10;ELSEIF [age] &lt;= 59 THEN &quot;50-59&quot;&#10;ELSEIF [age] &lt;= 69 THEN &quot;60-69&quot;&#10;ELSE &quot;70 and above&quot;&#10;END' />
+      </column>
+      
+      <!-- Calculated Field 2: BMI Category -->
+      <column caption='BMI Category' datatype='string' name='[Calculation_BmiCategory]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [bmi] &lt; 18.5 THEN &quot;Underweight (&lt;18.5)&quot;&#10;ELSEIF [bmi] &lt; 25.0 THEN &quot;Normal weight (18.5-24.9)&quot;&#10;ELSEIF [bmi] &lt; 30.0 THEN &quot;Overweight (25.0-29.9)&quot;&#10;ELSE &quot;Obesity (&gt;=30.0)&quot;&#10;END' />
+      </column>
+      
+      <!-- Calculated Field 3: Heart Disease Status -->
+      <column caption='Heart Disease Status' datatype='string' name='[Calculation_HDStatus]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [heart_disease] = 1 THEN &quot;Positive&quot; ELSEIF [heart_disease] = 0 THEN &quot;Negative&quot; ELSE &quot;Unknown&quot; END' />
+      </column>
+      
+      <!-- Calculated Field 4: Diabetes Status -->
+      <column caption='Diabetes Status' datatype='string' name='[Calculation_DiabetesStatus]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [diabetes] = 1 THEN &quot;Positive&quot; ELSEIF [diabetes] = 0 THEN &quot;Negative&quot; ELSE &quot;Unknown&quot; END' />
+      </column>
+      
+      <!-- Calculated Field 5: Stroke Status -->
+      <column caption='Stroke Status' datatype='string' name='[Calculation_StrokeStatus]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [stroke] = 1 THEN &quot;Positive&quot; ELSEIF [stroke] = 0 THEN &quot;Negative&quot; ELSE &quot;Unknown&quot; END' />
+      </column>
+      
+      <!-- Calculated Field 6: Heart Disease Prevalence (%) -->
+      <column caption='Heart Disease Prevalence (%)' datatype='real' name='[Calculation_HDPrev]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='(SUM([heart_disease]) / COUNT([heart_disease])) * 100' />
+      </column>
+      
+      <!-- Calculated Field 7: Diabetes Prevalence (%) -->
+      <column caption='Diabetes Prevalence (%)' datatype='real' name='[Calculation_DiabetesPrev]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='(SUM([diabetes]) / COUNT([diabetes])) * 100' />
+      </column>
+      
+      <!-- Calculated Field 8: Stroke Prevalence (%) -->
+      <column caption='Stroke Prevalence (%)' datatype='real' name='[Calculation_StrokePrev]' role='measure' type='quantitative'>
+        <calculation class='tableau' formula='(SUM([stroke]) / COUNT([stroke])) * 100' />
+      </column>
+      
+      <!-- Calculated Field 9: Exercise Level Label -->
+      <column caption='Exercise Level Label' datatype='string' name='[Calculation_ExerciseLabel]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [exercise_level] = 0 THEN &quot;Sedentary (Level 0)&quot; ELSEIF [exercise_level] = 1 THEN &quot;Moderate (Level 1)&quot; ELSE &quot;Active (Level 2)&quot; END' />
+      </column>
+      
+      <!-- Calculated Field 10: Smoking Status Label -->
+      <column caption='Smoking Status Label' datatype='string' name='[Calculation_SmokingLabel]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [smoking] = 1 THEN &quot;Smoker&quot; ELSE &quot;Non-Smoker&quot; END' />
+      </column>
+      
+      <!-- Calculated Field 11: Alcohol Consumption Label -->
+      <column caption='Alcohol Consumption Label' datatype='string' name='[Calculation_AlcoholLabel]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [alcohol] = 1 THEN &quot;Drinker&quot; ELSE &quot;Non-Drinker&quot; END' />
+      </column>
+      
+      <!-- Calculated Field 12: Fatigue Label -->
+      <column caption='Fatigue Label' datatype='string' name='[Calculation_FatigueLabel]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [fatigue] = 1 THEN &quot;Fatigue Reported&quot; ELSE &quot;No Fatigue&quot; END' />
+      </column>
+      
+      <!-- Calculated Field 13: Chest Pain Label -->
+      <column caption='Chest Pain Label' datatype='string' name='[Calculation_ChestPainLabel]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [chest_pain] = 1 THEN &quot;Chest Pain Reported&quot; ELSE &quot;No Chest Pain&quot; END' />
+      </column>
+      
+      <!-- Calculated Field 14: Dizziness Label -->
+      <column caption='Dizziness Label' datatype='string' name='[Calculation_DizzinessLabel]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='IF [dizziness] = 1 THEN &quot;Dizziness Reported&quot; ELSE &quot;No Dizziness&quot; END' />
+      </column>
+      
+      <!-- Calculated Field 15: Health Risk Score Data Quality Note -->
+      <column caption='Health Risk Score Note' datatype='string' name='[Calculation_RiskScoreNote]' role='dimension' type='nominal'>
+        <calculation class='tableau' formula='&quot;Data Quality Note: Health Risk Score is constant at 100.0 across all 5,000 records. Non-discriminative for clinical risk ranking.&quot;' />
+      </column>
+      
+      <!-- Column aliases / roles -->
+      <column caption='Age' datatype='integer' name='[age]' role='dimension' type='quantitative' />
+      <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+      <column caption='BMI' datatype='real' name='[bmi]' role='measure' type='quantitative' />
+      <column caption='Blood Pressure' datatype='integer' name='[blood_pressure]' role='measure' type='quantitative' />
+      <column caption='Cholesterol' datatype='integer' name='[cholesterol]' role='measure' type='quantitative' />
+      <column caption='Glucose' datatype='integer' name='[glucose]' role='measure' type='quantitative' />
+      <column caption='Heart Disease' datatype='integer' name='[heart_disease]' role='measure' type='quantitative' />
+      <column caption='Diabetes' datatype='integer' name='[diabetes]' role='measure' type='quantitative' />
+      <column caption='Stroke' datatype='integer' name='[stroke]' role='measure' type='quantitative' />
+      <column caption='Health Risk Score' datatype='real' name='[health_risk_score]' role='measure' type='quantitative' />
+    </datasource>
+  </datasources>
+
+  <worksheets>
+    <!-- WORKSHEET 1: Overall Disease Prevalence -->
+    <worksheet name='Overall Disease Prevalence'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='Heart Disease Prevalence (%)' datatype='real' name='[Calculation_HDPrev]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='(SUM([heart_disease]) / COUNT([heart_disease])) * 100' />
+            </column>
+            <column caption='Diabetes Prevalence (%)' datatype='real' name='[Calculation_DiabetesPrev]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='(SUM([diabetes]) / COUNT([diabetes])) * 100' />
+            </column>
+            <column caption='Stroke Prevalence (%)' datatype='real' name='[Calculation_StrokePrev]' role='measure' type='quantitative'>
+              <calculation class='tableau' formula='(SUM([stroke]) / COUNT([stroke])) * 100' />
+            </column>
+            <column-instance column='[Calculation_HDPrev]' derivation='User' name='[usr:Calculation_HDPrev:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_DiabetesPrev]' derivation='User' name='[usr:Calculation_DiabetesPrev:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[Calculation_StrokePrev]' derivation='User' name='[usr:Calculation_StrokePrev:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+          </pane>
+        </panes>
+        <rows>[federated.smart_healthcare_dataset].[Multiple Values]</rows>
+        <cols>[federated.smart_healthcare_dataset].[:Measure Names]</cols>
+      </table>
+      <simple-id uuid='{WS-0001-0001-0001-000000000001}' />
+    </worksheet>
+
+    <!-- WORKSHEET 2: Disease Distribution (Counts) -->
+    <worksheet name='Disease Distribution'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='Heart Disease' datatype='integer' name='[heart_disease]' role='measure' type='quantitative' />
+            <column caption='Diabetes' datatype='integer' name='[diabetes]' role='measure' type='quantitative' />
+            <column caption='Stroke' datatype='integer' name='[stroke]' role='measure' type='quantitative' />
+            <column-instance column='[heart_disease]' derivation='Sum' name='[sum:heart_disease:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[diabetes]' derivation='Sum' name='[sum:diabetes:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[stroke]' derivation='Sum' name='[sum:stroke:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+          </pane>
+        </panes>
+        <rows>[federated.smart_healthcare_dataset].[Multiple Values]</rows>
+        <cols>[federated.smart_healthcare_dataset].[:Measure Names]</cols>
+      </table>
+      <simple-id uuid='{WS-0002-0002-0002-000000000002}' />
+    </worksheet>
+
+    <!-- WORKSHEET 3: Disease Prevalence by Age Group -->
+    <worksheet name='Prevalence by Age Group'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='Age Group' datatype='string' name='[Calculation_AgeGroup]' role='dimension' type='nominal' />
+            <column caption='Heart Disease' datatype='integer' name='[heart_disease]' role='measure' type='quantitative' />
+            <column caption='Diabetes' datatype='integer' name='[diabetes]' role='measure' type='quantitative' />
+            <column caption='Stroke' datatype='integer' name='[stroke]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_AgeGroup]' derivation='None' name='[none:Calculation_AgeGroup:nk]' pivot='key' type='nominal' />
+            <column-instance column='[heart_disease]' derivation='Avg' name='[avg:heart_disease:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[diabetes]' derivation='Avg' name='[avg:diabetes:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[stroke]' derivation='Avg' name='[avg:stroke:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+          </pane>
+        </panes>
+        <rows>[federated.smart_healthcare_dataset].[Multiple Values]</rows>
+        <cols>[federated.smart_healthcare_dataset].[none:Calculation_AgeGroup:nk]</cols>
+      </table>
+      <simple-id uuid='{WS-0003-0003-0003-000000000003}' />
+    </worksheet>
+
+    <!-- WORKSHEET 4: Disease Prevalence by Gender -->
+    <worksheet name='Prevalence by Gender'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column caption='Heart Disease' datatype='integer' name='[heart_disease]' role='measure' type='quantitative' />
+            <column caption='Diabetes' datatype='integer' name='[diabetes]' role='measure' type='quantitative' />
+            <column caption='Stroke' datatype='integer' name='[stroke]' role='measure' type='quantitative' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[heart_disease]' derivation='Avg' name='[avg:heart_disease:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[diabetes]' derivation='Avg' name='[avg:diabetes:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[stroke]' derivation='Avg' name='[avg:stroke:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+          </pane>
+        </panes>
+        <rows>[federated.smart_healthcare_dataset].[Multiple Values]</rows>
+        <cols>[federated.smart_healthcare_dataset].[none:gender:nk]</cols>
+      </table>
+      <simple-id uuid='{WS-0004-0004-0004-000000000004}' />
+    </worksheet>
+
+    <!-- WORKSHEET 5: BMI Category Analysis -->
+    <worksheet name='BMI Category Analysis'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='BMI Category' datatype='string' name='[Calculation_BmiCategory]' role='dimension' type='nominal' />
+            <column caption='Heart Disease' datatype='integer' name='[heart_disease]' role='measure' type='quantitative' />
+            <column caption='Diabetes' datatype='integer' name='[diabetes]' role='measure' type='quantitative' />
+            <column caption='Stroke' datatype='integer' name='[stroke]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_BmiCategory]' derivation='None' name='[none:Calculation_BmiCategory:nk]' pivot='key' type='nominal' />
+            <column-instance column='[heart_disease]' derivation='Avg' name='[avg:heart_disease:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[diabetes]' derivation='Avg' name='[avg:diabetes:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[stroke]' derivation='Avg' name='[avg:stroke:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+          </pane>
+        </panes>
+        <rows>[federated.smart_healthcare_dataset].[Multiple Values]</rows>
+        <cols>[federated.smart_healthcare_dataset].[none:Calculation_BmiCategory:nk]</cols>
+      </table>
+      <simple-id uuid='{WS-0005-0005-0005-000000000005}' />
+    </worksheet>
+
+    <!-- WORKSHEET 6: Clinical Indicators Comparison -->
+    <worksheet name='Clinical Indicators'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='Heart Disease Status' datatype='string' name='[Calculation_HDStatus]' role='dimension' type='nominal' />
+            <column caption='Blood Pressure' datatype='integer' name='[blood_pressure]' role='measure' type='quantitative' />
+            <column caption='Cholesterol' datatype='integer' name='[cholesterol]' role='measure' type='quantitative' />
+            <column caption='Glucose' datatype='integer' name='[glucose]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_HDStatus]' derivation='None' name='[none:Calculation_HDStatus:nk]' pivot='key' type='nominal' />
+            <column-instance column='[blood_pressure]' derivation='Avg' name='[avg:blood_pressure:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[cholesterol]' derivation='Avg' name='[avg:cholesterol:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[glucose]' derivation='Avg' name='[avg:glucose:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+          </pane>
+        </panes>
+        <rows>[federated.smart_healthcare_dataset].[Multiple Values]</rows>
+        <cols>[federated.smart_healthcare_dataset].[none:Calculation_HDStatus:nk]</cols>
+      </table>
+      <simple-id uuid='{WS-0006-0006-0006-000000000006}' />
+    </worksheet>
+
+    <!-- WORKSHEET 7: Lifestyle Analysis -->
+    <worksheet name='Lifestyle Analysis'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='Exercise Level Label' datatype='string' name='[Calculation_ExerciseLabel]' role='dimension' type='nominal' />
+            <column caption='Heart Disease' datatype='integer' name='[heart_disease]' role='measure' type='quantitative' />
+            <column caption='Diabetes' datatype='integer' name='[diabetes]' role='measure' type='quantitative' />
+            <column caption='Stroke' datatype='integer' name='[stroke]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_ExerciseLabel]' derivation='None' name='[none:Calculation_ExerciseLabel:nk]' pivot='key' type='nominal' />
+            <column-instance column='[heart_disease]' derivation='Avg' name='[avg:heart_disease:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[diabetes]' derivation='Avg' name='[avg:diabetes:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[stroke]' derivation='Avg' name='[avg:stroke:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+          </pane>
+        </panes>
+        <rows>[federated.smart_healthcare_dataset].[Multiple Values]</rows>
+        <cols>[federated.smart_healthcare_dataset].[none:Calculation_ExerciseLabel:nk]</cols>
+      </table>
+      <simple-id uuid='{WS-0007-0007-0007-000000000007}' />
+    </worksheet>
+
+    <!-- WORKSHEET 8: Symptoms and Disease Patterns -->
+    <worksheet name='Symptom Patterns'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='Chest Pain Label' datatype='string' name='[Calculation_ChestPainLabel]' role='dimension' type='nominal' />
+            <column caption='Heart Disease' datatype='integer' name='[heart_disease]' role='measure' type='quantitative' />
+            <column caption='Diabetes' datatype='integer' name='[diabetes]' role='measure' type='quantitative' />
+            <column caption='Stroke' datatype='integer' name='[stroke]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_ChestPainLabel]' derivation='None' name='[none:Calculation_ChestPainLabel:nk]' pivot='key' type='nominal' />
+            <column-instance column='[heart_disease]' derivation='Avg' name='[avg:heart_disease:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[diabetes]' derivation='Avg' name='[avg:diabetes:qk]' pivot='key' type='quantitative' />
+            <column-instance column='[stroke]' derivation='Avg' name='[avg:stroke:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+          </pane>
+        </panes>
+        <rows>[federated.smart_healthcare_dataset].[Multiple Values]</rows>
+        <cols>[federated.smart_healthcare_dataset].[none:Calculation_ChestPainLabel:nk]</cols>
+      </table>
+      <simple-id uuid='{WS-0008-0008-0008-000000000008}' />
+    </worksheet>
+
+    <!-- WORKSHEET 9: Health Risk Score Data Quality Note -->
+    <worksheet name='Health Risk Score Note'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='Health Risk Score Note' datatype='string' name='[Calculation_RiskScoreNote]' role='dimension' type='nominal' />
+            <column-instance column='[Calculation_RiskScoreNote]' derivation='None' name='[none:Calculation_RiskScoreNote:nk]' pivot='key' type='nominal' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Text' />
+            <encodings>
+              <text column='[federated.smart_healthcare_dataset].[none:Calculation_RiskScoreNote:nk]' />
+            </encodings>
+          </pane>
+        </panes>
+        <rows />
+        <cols>[federated.smart_healthcare_dataset].[none:Calculation_RiskScoreNote:nk]</cols>
+      </table>
+      <simple-id uuid='{WS-0009-0009-0009-000000000009}' />
+    </worksheet>
+
+    <!-- WORKSHEET 10: Gender & Age Demographics -->
+    <worksheet name='Demographic Overview'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='Age Group' datatype='string' name='[Calculation_AgeGroup]' role='dimension' type='nominal' />
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' />
+            <column-instance column='[Calculation_AgeGroup]' derivation='None' name='[none:Calculation_AgeGroup:nk]' pivot='key' type='nominal' />
+            <column-instance column='[gender]' derivation='None' name='[none:gender:nk]' pivot='key' type='nominal' />
+            <column-instance column='[Number of Records]' derivation='Sum' name='[sum:Number of Records:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Bar' />
+            <encodings>
+              <color column='[federated.smart_healthcare_dataset].[none:gender:nk]' />
+            </encodings>
+          </pane>
+        </panes>
+        <rows>[federated.smart_healthcare_dataset].[sum:Number of Records:qk]</rows>
+        <cols>[federated.smart_healthcare_dataset].[none:Calculation_AgeGroup:nk]</cols>
+      </table>
+      <simple-id uuid='{WS-0010-0010-0010-000000000010}' />
+    </worksheet>
+
+    <!-- WORKSHEET 11: Summary Findings / KPI Card -->
+    <worksheet name='Key Findings'>
+      <table>
+        <view>
+          <datasources>
+            <datasource caption='smart_healthcare_dataset' name='federated.smart_healthcare_dataset' />
+          </datasources>
+          <datasource-dependencies datasource='federated.smart_healthcare_dataset'>
+            <column caption='Gender' datatype='string' name='[gender]' role='dimension' type='nominal' />
+            <column datatype='integer' name='[Number of Records]' role='measure' type='quantitative' />
+            <column-instance column='[Number of Records]' derivation='Sum' name='[sum:Number of Records:qk]' pivot='key' type='quantitative' />
+          </datasource-dependencies>
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Text' />
+            <encodings>
+              <text column='[federated.smart_healthcare_dataset].[sum:Number of Records:qk]' />
+            </encodings>
+          </pane>
+        </panes>
+        <rows />
+        <cols>[federated.smart_healthcare_dataset].[sum:Number of Records:qk]</cols>
+      </table>
+      <simple-id uuid='{WS-0011-0011-0011-000000000011}' />
+    </worksheet>
+  </worksheets>
+
+  <dashboards>
+    <dashboard name='Chronic Disease Risk Analysis Dashboard'>
+      <style />
+      <size maxheight='1000' maxwidth='1440' minheight='1000' minwidth='1440' sizing-mode='fixed' />
+      <zones>
+        <zone h='100000' id='1' type-v2='layout-basic' w='100000' x='0' y='0'>
+          <!-- Top Title Banner -->
+          <zone h='8000' id='2' type-v2='text' w='100000' x='0' y='0'>
+            <formatted-text>
+              <run bold='true' fontcolor='#0d3b66' fontsize='18'>CHRONIC DISEASE RISK ANALYSIS &amp; HEALTHCARE INSIGHTS</run>
+              <run fontcolor='#4a5568' fontsize='10'>&#10;Interactive exploration of patient demographics, clinical indicators, lifestyle patterns, and chronic disease prevalence (N = 5,000 Records)</run>
+            </formatted-text>
+          </zone>
+          
+          <!-- Row 1: KPI Cards & Overview -->
+          <zone h='28000' id='3' name='Overall Disease Prevalence' type-v2='viz' w='33000' x='0' y='8000'>
+          </zone>
+          <zone h='28000' id='4' name='Disease Distribution' type-v2='viz' w='33000' x='33000' y='8000'>
+          </zone>
+          <zone h='28000' id='5' name='Demographic Overview' type-v2='viz' w='34000' x='66000' y='8000'>
+          </zone>
+          
+          <!-- Row 2: Demographic Patterns & BMI -->
+          <zone h='30000' id='6' name='Prevalence by Age Group' type-v2='viz' w='33000' x='0' y='36000'>
+          </zone>
+          <zone h='30000' id='7' name='Prevalence by Gender' type-v2='viz' w='33000' x='33000' y='36000'>
+          </zone>
+          <zone h='30000' id='8' name='BMI Category Analysis' type-v2='viz' w='34000' x='66000' y='36000'>
+          </zone>
+          
+          <!-- Row 3: Clinical Indicators & Lifestyle -->
+          <zone h='26000' id='9' name='Clinical Indicators' type-v2='viz' w='33000' x='0' y='66000'>
+          </zone>
+          <zone h='26000' id='10' name='Lifestyle Analysis' type-v2='viz' w='33000' x='33000' y='66000'>
+          </zone>
+          <zone h='26000' id='11' name='Symptom Patterns' type-v2='viz' w='34000' x='66000' y='66000'>
+          </zone>
+
+          <!-- Bottom Row: Data Quality Warning & Key Findings -->
+          <zone h='8000' id='12' name='Health Risk Score Note' type-v2='viz' w='100000' x='0' y='92000'>
+          </zone>
+        </zone>
+      </zones>
+      <simple-id uuid='{DASH-0001-0001-0001-000000000001}' />
+    </dashboard>
+  </dashboards>
+
+  <windows>
+    <window class='dashboard' maximized='true' name='Chronic Disease Risk Analysis Dashboard'>
+      <simple-id uuid='{WIN-DASH-0001-0001-0001-000000000001}' />
+    </window>
+    <window class='worksheet' name='Overall Disease Prevalence'>
+      <simple-id uuid='{WIN-WS-0001-0001-0001-000000000001}' />
+    </window>
+    <window class='worksheet' name='Disease Distribution'>
+      <simple-id uuid='{WIN-WS-0002-0002-0002-000000000002}' />
+    </window>
+    <window class='worksheet' name='Prevalence by Age Group'>
+      <simple-id uuid='{WIN-WS-0003-0003-0003-000000000003}' />
+    </window>
+    <window class='worksheet' name='Prevalence by Gender'>
+      <simple-id uuid='{WIN-WS-0004-0004-0004-000000000004}' />
+    </window>
+    <window class='worksheet' name='BMI Category Analysis'>
+      <simple-id uuid='{WIN-WS-0005-0005-0005-000000000005}' />
+    </window>
+    <window class='worksheet' name='Clinical Indicators'>
+      <simple-id uuid='{WIN-WS-0006-0006-0006-000000000006}' />
+    </window>
+    <window class='worksheet' name='Lifestyle Analysis'>
+      <simple-id uuid='{WIN-WS-0007-0007-0007-000000000007}' />
+    </window>
+    <window class='worksheet' name='Symptom Patterns'>
+      <simple-id uuid='{WIN-WS-0008-0008-0008-000000000008}' />
+    </window>
+    <window class='worksheet' name='Health Risk Score Note'>
+      <simple-id uuid='{WIN-WS-0009-0009-0009-000000000009}' />
+    </window>
+    <window class='worksheet' name='Demographic Overview'>
+      <simple-id uuid='{WIN-WS-0010-0010-0010-000000000010}' />
+    </window>
+    <window class='worksheet' name='Key Findings'>
+      <simple-id uuid='{WIN-WS-0011-0011-0011-000000000011}' />
+    </window>
+  </windows>
+</workbook>
